@@ -1,0 +1,2 @@
+to run the last tracer viewer: playwright show-trace traces/trace-test_example.zip
+to open codegen: python3 -m playwright codegen https://automationexercise.com/signup
