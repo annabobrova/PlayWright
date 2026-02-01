@@ -1,6 +1,9 @@
+node_modules/
+playwright-report/
+test-results/
+traces/
+.DS_Store
+*.png
 .venv/
 __pycache__/
 .pytest_cache/
-traces/
-*.png
-.DS_Store
