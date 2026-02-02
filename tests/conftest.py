@@ -53,6 +53,29 @@ def block_ads(page: Page):
         else route.continue_()
     )
 
+@pytest.hookimpl(hookwrapper=True)
+def pytest_runtest_makereport(item, call):
+    """
+    Extends the Pytest HTML Report to include a screenshot if a test fails.
+    """
+    pytest_html = item.config.pluginmanager.getplugin("html")
+    outcome = yield
+    report = outcome.get_result()
+    extra = getattr(report, "extra", [])
+
+    if report.when == "call" and report.failed:
+        # Get the 'page' fixture from the test item
+        page = item.funcargs.get("page")
+        if page:
+            os.makedirs("screenshots", exist_ok=True)
+            screenshot_path = f"screenshots/{item.nodeid.replace('::', '_').replace('/', '_')}.png"
+            page.screenshot(path=screenshot_path)
+            if pytest_html is not None:
+                # Add the screenshot to the HTML report
+                extra.append(pytest_html.extras.image(screenshot_path))
+    
+    report.extra = extra
+
 
 
 
