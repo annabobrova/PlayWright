@@ -8,3 +8,4 @@ screenshots/
 .venv/
 __pycache__/
 .pytest_cache/
+report.html
