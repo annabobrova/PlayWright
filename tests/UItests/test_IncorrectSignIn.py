@@ -5,6 +5,9 @@ from utils import generate_random_email
 from config import BASE_URL, TEST_PASSWORD
 
 def test_incorrect_login_with_unregistered_email(page: Page) -> None:
+    """
+    Test login with an unregistered email and verify the incorrect credentials error.
+    """
     home_page = HomePage(page)
     # Generate a random email that definitely doesn't exist in the system
     random_email = generate_random_email()

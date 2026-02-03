@@ -61,7 +61,7 @@ def pytest_runtest_makereport(item, call):
     pytest_html = item.config.pluginmanager.getplugin("html")
     outcome = yield
     report = outcome.get_result()
-    extra = getattr(report, "extra", [])
+    extras = getattr(report, "extras", [])
 
     if report.when == "call" and report.failed:
         # Get the 'page' fixture from the test item
@@ -72,10 +72,9 @@ def pytest_runtest_makereport(item, call):
             page.screenshot(path=screenshot_path)
             if pytest_html is not None:
                 # Add the screenshot to the HTML report
-                extra.append(pytest_html.extras.image(screenshot_path))
+                extras.append(pytest_html.extras.image(screenshot_path))
     
-    report.extra = extra
-
+    report.extras = extras
 
 
 

@@ -8,6 +8,14 @@ class HomePage:
         """Click on Signup/Login link to navigate to the signup/login page."""
         self.page.get_by_role("link", name=" Signup / Login").click()
 
+    def goto_contact_us(self) -> None:
+        """Click on Contact Us link to navigate to the contact page."""
+        self.page.get_by_role("link", name=" Contact us").click()
+
+    def goto_products(self) -> None:
+        """Click on Products link to navigate to the products page."""
+        self.page.get_by_role("link", name=" Products").click()
+
     def delete_account(self) -> None:
         # Click on the Delete Account link
         self.page.get_by_role("link", name=" Delete Account").click()

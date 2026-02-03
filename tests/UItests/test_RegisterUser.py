@@ -7,17 +7,18 @@ from config import (
     BASE_URL, TEST_FIRST_NAME
 )
 
-# Create a single randomly generated email to be used for the test run
-GENERATED_TEST_EMAIL = generate_random_email()
-
 """
 Test user registration flow on AutomationExercise website.
 This test uses a unique email for each run to ensure independence.
 """
 def test_example(page: Page) -> None:
+    """
+    Test user registration, account creation, and successful login verification.
+    """
     home_page = HomePage(page)
+    generated_test_email = generate_random_email()
     # Pass the unique email to the page object
-    signup_page = SignupPage(page, email=GENERATED_TEST_EMAIL)
+    signup_page = SignupPage(page, email=generated_test_email)
 
     try:
         # === Main Test Logic ===
@@ -48,9 +49,9 @@ def test_example(page: Page) -> None:
 
     finally:
         # === Teardown: Post-test cleanup ===
-        print(f"Teardown: Attempting to delete user '{GENERATED_TEST_EMAIL}'.")
+        print(f"Teardown: Attempting to delete user '{generated_test_email}'.")
         page.goto(BASE_URL)
         
         home_page.delete_account()
         expect(page.get_by_text("Account Deleted!")).to_be_visible()
-        print(f"Teardown: User '{GENERATED_TEST_EMAIL}' successfully deleted.")
+        print(f"Teardown: User '{generated_test_email}' successfully deleted.")
