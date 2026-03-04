@@ -28,3 +28,23 @@ class ProductsPage:
         expect(product_info).to_contain_text("Condition:")
         expect(product_info).to_contain_text("Brand:")
         expect(product_info).to_contain_text(expected_price)
+
+    def search_for_product(self, query: str) -> None:
+        self.page.locator("input#search_product").fill(query)
+        self.page.locator("button#submit_search").click()
+
+    def verify_searched_products_visible(self) -> None:
+        expect(self.page.get_by_role("heading", name="Searched Products")).to_be_visible()
+        expect(self.page.locator(".features_items")).to_be_visible()
+
+    def verify_search_results_contain_name(self, expected_name: str) -> None:
+        product_names = self.page.locator(".features_items .productinfo p")
+        expect(product_names.first).to_be_visible()
+        for name in product_names.all_inner_texts():
+            assert expected_name.lower() in name.lower(), f"Unexpected product name: {name}"
+
+    def verify_products_list_contains(self, expected_name: str, expected_price: str) -> None:
+        products_block = self.page.locator(".features_items")
+        expect(products_block).to_be_visible()
+        expect(products_block).to_contain_text(expected_name)
+        expect(products_block).to_contain_text(expected_price)
