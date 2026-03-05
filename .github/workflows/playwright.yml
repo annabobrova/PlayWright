@@ -28,8 +28,8 @@ jobs:
       run: playwright install chromium --with-deps
 
     - name: Run Playwright tests
-      # Points to the 'tests' directory and specifies the browser
-      run: pytest tests/ --browser chromium --junitxml=results.xml
+      # Added the --headless flag
+      run: pytest tests/ --browser chromium --headless
 
     - name: Upload Test Results
       if: always()
