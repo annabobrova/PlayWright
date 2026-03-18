@@ -29,7 +29,7 @@ jobs:
 
     - name: Run Playwright tests
       # Added the --headless flag
-      run: pytest tests/UItests --browser chromium --headless=true
+      run: pytest tests/UItests --browser chromium --headless=true --junitxml=results.xml
 
     - name: Upload Test Results
       if: always()
