@@ -1,4 +1,4 @@
-import os
+import os, re
 import sys
 from typing import Any, Generator # Import Generator and Any for type hinting
 
@@ -47,13 +47,14 @@ def page(context: BrowserContext) -> Page:
 @pytest.fixture(autouse=True)
 def block_ads(page: Page):
     """
-    Automatically block ads (googleads, doubleclick) for every test.
-    This runs automatically for every test that uses the 'page' fixture.
+    Optimized ad blocker that only intercepts specific ad domains
+    without interfering with other API calls.
     """
-    page.route("**/*", lambda route: route.abort() 
-        if "googleads" in route.request.url or "doubleclick" in route.request.url 
-        else route.continue_()
-    )
+    # Use a regex to target ONLY ads, leaving other traffic alone
+    ad_regex = re.compile(r"googleads|doubleclick|quantserve|facebook")
+    
+    # We only route requests that match the ad pattern
+    page.route(ad_regex, lambda route: route.abort())
 
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item, call):
