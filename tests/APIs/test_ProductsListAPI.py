@@ -3,6 +3,7 @@ from config import BASE_URL
 
 
 def test_products_list_api_post_not_supported(page: Page) -> None:
+    """API 2: Verify that POST to /api/productsList returns 405 - method not supported."""
     response = page.request.post(f"{BASE_URL}/api/productsList")
 
     body = response.json()
@@ -11,6 +12,7 @@ def test_products_list_api_post_not_supported(page: Page) -> None:
 
 
 def test_products_list_api_returns_products(page: Page) -> None:
+    """API 1: Verify that GET /api/productsList returns 200 with a non-empty list of products containing id, name, price, brand and category."""
     response = page.request.get(f"{BASE_URL}/api/productsList")
 
     assert response.status == 200

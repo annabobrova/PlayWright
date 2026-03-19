@@ -4,6 +4,7 @@ from utils import generate_random_email, create_user_via_api, delete_user_via_ap
 from config import BASE_URL, TEST_PASSWORD
 
 def test_api_11_create_register_user_account(page):
+    """API 11: Verify that POST /api/createAccount creates a new user and returns 201 - User created!"""
     # Get the API request context from the page (or use playwright.request)
     api_request_context = page.request
     

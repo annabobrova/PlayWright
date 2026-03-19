@@ -1,0 +1,71 @@
+from playwright.sync_api import Page
+from utils import generate_random_email, create_user_via_api, delete_user_via_api
+from config import (
+    BASE_URL, TEST_PASSWORD, TEST_NAME_SIGNUP, TEST_FIRST_NAME, TEST_LAST_NAME,
+    TEST_COMPANY, TEST_ADDRESS, TEST_COUNTRY, TEST_STATE, TEST_CITY,
+    TEST_ZIPCODE, TEST_PHONE, TEST_DAY, TEST_MONTH, TEST_YEAR
+)
+
+
+def test_api_12_delete_user_account(page: Page) -> None:
+    """API 12: Verify that DELETE /api/deleteAccount with valid credentials returns 200 - Account deleted!"""
+    email = generate_random_email()
+    create_user_via_api(page.request, email)
+
+    delete_json = delete_user_via_api(page.request, email)
+    assert delete_json.get("responseCode") == 200
+    assert delete_json.get("message") == "Account deleted!"
+
+
+def test_api_13_update_user_account(page: Page) -> None:
+    """API 13: Verify that PUT /api/updateAccount with full user details returns 200 - User updated!"""
+    email = generate_random_email()
+    create_user_via_api(page.request, email)
+
+    payload = {
+        "name": TEST_NAME_SIGNUP,
+        "email": email,
+        "password": TEST_PASSWORD,
+        "title": "Mrs",
+        "birth_date": TEST_DAY,
+        "birth_month": TEST_MONTH,
+        "birth_year": TEST_YEAR,
+        "firstname": TEST_FIRST_NAME,
+        "lastname": TEST_LAST_NAME,
+        "company": TEST_COMPANY,
+        "address1": TEST_ADDRESS,
+        "address2": "Apt 202",
+        "country": TEST_COUNTRY,
+        "zipcode": TEST_ZIPCODE,
+        "state": TEST_STATE,
+        "city": TEST_CITY,
+        "mobile_number": TEST_PHONE
+    }
+    response = page.request.put(f"{BASE_URL}/api/updateAccount", form=payload)
+
+    body = response.json()
+    assert body.get("responseCode") == 200
+    assert body.get("message") == "User updated!"
+
+    delete_user_via_api(page.request, email)
+
+
+def test_api_14_get_user_detail_by_email(page: Page) -> None:
+    """API 14: Verify that GET /api/getUserDetailByEmail with a valid email returns 200 with user details including id, name and email."""
+    email = generate_random_email()
+    create_user_via_api(page.request, email)
+
+    response = page.request.get(f"{BASE_URL}/api/getUserDetailByEmail", params={"email": email})
+
+    assert response.status == 200
+
+    body = response.json()
+    assert body.get("responseCode") == 200
+
+    user = body.get("user")
+    assert user is not None
+    assert user.get("email") == email
+    assert "name" in user
+    assert "id" in user
+
+    delete_user_via_api(page.request, email)
