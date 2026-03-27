@@ -1,0 +1,9 @@
+services:
+  playwright-tests:
+    build: .
+    volumes:
+      - ./playwright-report:/app/playwright-report
+      - ./traces:/app/traces
+      - ./screenshots:/app/screenshots
+    environment:
+      - PYTHONDONTWRITEBYTECODE=1

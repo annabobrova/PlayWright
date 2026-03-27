@@ -1,0 +1,11 @@
+.venv/
+node_modules/
+__pycache__/
+.pytest_cache/
+traces/
+screenshots/
+playwright-report/
+report.html
+*.png
+.git/
+.DS_Store
