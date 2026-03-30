@@ -13,7 +13,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           playwright install --with-deps chromium
-          pytest
+          pytest --headless=true
 
   # Your new Docker setup
   docker-run:
@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Run tests inside container
         run: |
-          # No need to run 'playwright install' here! 
+          # No need to run 'playwright install' here!
           # The browsers are already in the image.
           pip install -r requirements.txt
-          pytest
+          pytest --headless=true
