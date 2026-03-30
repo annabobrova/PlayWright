@@ -20,7 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     # This tells GitHub to run the entire job inside this image
     container:
-      image: mcr.microsoft.com/playwright/python:v1.40.0-jammy
+      image: mcr.microsoft.com/playwright/python:v1.58.0-jammy
     steps:
       - uses: actions/checkout@v4
       - name: Run tests inside container
