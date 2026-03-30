@@ -15,7 +15,9 @@ def test_contact_us_form_submission(page: Page) -> None:
     contact_us_page = ContactUsPage(page)
 
     test_email = generate_random_email()
-    file_to_upload = Path(__file__).resolve().parents[2] / "debug_screenshot_after_create_account.png"
+    # requirements.txt is used as the upload file because it is always present in the project root,
+    # both locally and inside the Docker container, making the test environment-agnostic.
+    file_to_upload = Path(__file__).resolve().parents[2] / "requirements.txt"
 
     # 1. Navigate to home page
     page.goto(BASE_URL)
@@ -40,6 +42,7 @@ def test_contact_us_form_submission(page: Page) -> None:
     contact_us_page.submit_form_accept_dialog()
 
     # 6. Verify success message
+    page.wait_for_load_state("networkidle")
     success_alert = page.locator(
         ".status.alert-success",
         has_text="Success! Your details have been submitted successfully."
@@ -48,4 +51,4 @@ def test_contact_us_form_submission(page: Page) -> None:
 
     # 7. Click 'Home' button and verify landing page
     contact_us_page.click_home()
-    expect(page.get_by_role("heading", name="AutomationExercise")).to_be_visible()
+    expect(page.get_by_role("heading", name="AutomationExercise").first).to_be_visible()

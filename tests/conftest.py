@@ -32,12 +32,14 @@ def context(browser: Browser, request) -> Generator[BrowserContext, Any, None]: 
     context = browser.new_context()
     # start tracing for the test: screenshots, DOM snapshots and source files
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
-    yield context
-    # ensure traces directory exists and save trace per-test
-    os.makedirs("traces", exist_ok=True)
-    trace_path = f"traces/trace-{request.node.name}.zip"
-    context.tracing.stop(path=trace_path)
-    context.close()
+    try:
+        yield context
+    finally:
+        # ensure traces directory exists and save trace per-test
+        os.makedirs("traces", exist_ok=True)
+        trace_path = f"traces/trace-{request.node.name}.zip"
+        context.tracing.stop(path=trace_path)
+        context.close()
 
 
 @pytest.fixture
