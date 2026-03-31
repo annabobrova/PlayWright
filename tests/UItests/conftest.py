@@ -1,8 +1,12 @@
 import os
+import sys
 import re
 import pytest
 from typing import Generator
 from playwright.sync_api import Browser, Page, expect
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
+
 from config import BASE_URL, LOGIN_EMAIL, LOGIN_PASSWORD
 
 AUTH_STATE_PATH = "auth/state.json"
