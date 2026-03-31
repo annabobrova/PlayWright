@@ -30,7 +30,7 @@ class ProductsPage:
         expect(product_info).to_contain_text(expected_price)
 
     def search_for_product(self, query: str) -> None:
-        self.page.locator("input#search_product").fill(query)
+        self.page.get_by_placeholder("Search Product").fill(query)
         self.page.locator("button#submit_search").click()
 
     def verify_searched_products_visible(self) -> None:

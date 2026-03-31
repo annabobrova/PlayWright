@@ -6,10 +6,10 @@ class ContactUsPage:
         self.page = page
 
     def fill_contact_form(self, name: str, email: str, subject: str, message: str) -> None:
-        self.page.locator("input[data-qa='name']").fill(name)
-        self.page.locator("input[data-qa='email']").fill(email)
-        self.page.locator("input[data-qa='subject']").fill(subject)
-        self.page.locator("textarea[data-qa='message']").fill(message)
+        self.page.get_by_placeholder("Name").fill(name)
+        self.page.get_by_role("textbox", name="Email", exact=True).fill(email)
+        self.page.get_by_placeholder("Subject").fill(subject)
+        self.page.get_by_placeholder("Your Message Here").fill(message)
 
     def upload_file(self, file_path: str) -> None:
         file_input = self.page.locator("input[name='upload_file']")

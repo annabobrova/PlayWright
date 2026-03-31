@@ -10,26 +10,26 @@ pip install -r requirements.txt && playwright install
 ### Running Tests
 ```bash
 # All tests
-pytest
+python3 -m pytest
 
 # Specific suite
-pytest tests/APIs/
-pytest tests/UItests/
+python3 -m pytest tests/APIs/
+python3 -m pytest tests/UItests/
 
 # Single file
-pytest tests/UItests/test_RegisterUser.py
+python3 -m pytest tests/UItests/test_RegisterUser.py
 
 # Single function
-pytest tests/UItests/test_RegisterUser.py::test_example
+python3 -m pytest tests/UItests/test_RegisterUser.py::test_example
 
 # With HTML report
-pytest --html=report.html
+python3 -m pytest --html=report.html
 
 # Headless mode
-pytest --headless=true
+python3 -m pytest --headless=true
 
 # With slow motion (ms)
-pytest --playwright-slowmo=500
+python3 -m pytest --playwright-slowmo=500
 ```
 
 ### Debugging
@@ -55,3 +55,14 @@ Used only in `tests/UItests/`. Each page has a corresponding class in `pages/` t
 
 ### API Testing
 API tests use `page.request` (Playwright's built-in HTTP client) rather than the `requests` library, keeping API and UI tests in the same Playwright context.
+
+## Selector conventions
+
+Always prefer Playwright's semantic Locator API over raw CSS/XPath strings. Use in this order of preference:
+
+1. `get_by_role()` — for interactive elements (buttons, links, inputs, checkboxes, etc.)
+2. `get_by_label()` — for form fields with an associated `<label>`
+3. `get_by_placeholder()` — for inputs/textareas with placeholder text
+4. `get_by_text()` — for non-interactive elements identified by visible text
+5. `get_by_title()` / `get_by_alt_text()` — for elements with title or alt attributes
+6. CSS/attribute selectors (`locator("...")`) — only when no semantic locator applies (e.g., structural layout containers like `.features_items`, or `<select>` elements without accessible labels)
