@@ -17,11 +17,11 @@ def pytest_configure(config):
         sys.path.insert(0, project_root)
 
 @pytest.fixture(scope="session")
-def browser(request) -> Generator[Browser, Any, None]: # Corrected type hint
+def browser(request) -> Generator[Browser, Any, None]:
     headless = request.config.getoption("--headless").lower() == "true"
     slow_mo = int(request.config.getoption("--playwright-slowmo"))
     playwright = sync_playwright().start()
-    browser = playwright.chromium.launch(headless=headless, slow_mo=slow_mo) 
+    browser = playwright.chromium.launch(headless=headless, slow_mo=slow_mo)
     yield browser
     browser.close()
     playwright.stop()

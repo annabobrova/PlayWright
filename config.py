@@ -21,3 +21,7 @@ TEST_YEAR = "1975"
 # Base URL
 BASE_URL = "https://automationexercise.com/"
 
+# Login fixture credentials
+LOGIN_EMAIL = "playwright@automationexercise.com"
+LOGIN_PASSWORD = "Password123!"
+

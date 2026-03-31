@@ -43,6 +43,19 @@ class ProductsPage:
         for name in product_names.all_inner_texts():
             assert expected_name.lower() in name.lower(), f"Unexpected product name: {name}"
 
+    def add_to_cart(self) -> None:
+        self.page.get_by_role("button", name="Add to cart").click()
+
+    def get_product_name_by_index(self, index: int) -> str:
+        card = self.page.locator(".features_items .product-image-wrapper").nth(index)
+        return card.locator(".productinfo p").inner_text().strip()
+
+    def hover_and_add_to_cart(self, index: int) -> None:
+        card = self.page.locator(".features_items .product-image-wrapper").nth(index)
+        card.scroll_into_view_if_needed()
+        card.hover()
+        card.locator(".product-overlay a.add-to-cart").click()
+
     def verify_products_list_contains(self, expected_name: str, expected_price: str) -> None:
         products_block = self.page.locator(".features_items")
         expect(products_block).to_be_visible()

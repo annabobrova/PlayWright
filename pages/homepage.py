@@ -19,3 +19,6 @@ class HomePage:
     def delete_account(self) -> None:
         # Click on the Delete Account link
         self.page.get_by_role("link", name=" Delete Account").click()
+
+    def logout(self) -> None:
+        self.page.get_by_role("link", name=" Logout").click()

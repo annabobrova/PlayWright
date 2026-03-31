@@ -1,0 +1,132 @@
+PLAYWRIGHT LEARNING CHECKLIST
+==============================
+Project: automationexercise.com
+Goal: QA Engineer job readiness
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ UI TESTS — NEW SCENARIOS TO WRITE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Logout test
+      - Log in, click Logout, verify "Logged in as" is gone and you're redirected
+
+[ ] Add product to cart
+      - Navigate to a product, click "Add to Cart", verify cart count updates
+
+[ ] View cart
+      - Add items, go to cart page, verify product name and price appear
+
+[ ] Checkout flow
+      - Add to cart → checkout → verify address and order summary
+
+[ ] Category navigation
+      - Click a clothing category (e.g. Women > Dress), verify filtered products appear
+
+[ ] Scroll buttons
+      - Verify scroll-to-top and scroll-to-bottom buttons work
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ API TESTS — NEW ENDPOINTS TO TEST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] GET /api/getUserDetailByEmail with missing email param → expect 400
+
+[ ] PUT /api/updateAccount with missing required fields → expect error
+
+[ ] POST /api/createAccount with duplicate email → expect specific error code
+
+[ ] Verify response body structure more strictly
+      - Check every field in the response, not just responseCode
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ TEST QUALITY IMPROVEMENTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Parametrize a test with @pytest.mark.parametrize
+      - Example: run test_search_product with ["top", "dress", "jeans"]
+      - Command: @pytest.mark.parametrize("query", ["top", "dress", "jeans"])
+      - WHY: Very common in real projects, almost every interviewer asks about this
+
+[ ] Add test markers
+      - Tag tests as @pytest.mark.smoke or @pytest.mark.regression
+      - Run only smoke tests: python3 -m pytest -m smoke
+      - WHY: Used in CI to run fast smoke suite vs full regression
+
+[ ] Add a conftest.py inside tests/APIs/
+      - Create a fixture that sets up a user before the API test module and deletes after
+      - Avoid repeating setup/teardown in every API test
+
+[ ] Write a data-driven test
+      - Read test inputs from a CSV or JSON file instead of hardcoding them
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ REPORTING & CI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Add --self-contained-html to pytest.ini addopts
+      - Makes the HTML report embed screenshots so they show when you share the file
+      - addopts = --tb=short --html=report.html --self-contained-html
+
+[ ] Run the GitHub Actions workflow
+      - Push a change and watch it run in the Actions tab on GitHub
+      - Understand what fails in CI vs locally
+
+[ ] Intentionally break a test
+      - See what the HTML report, screenshot, and trace look like for a failure
+      - Then fix it — practice the full debug cycle
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ DEBUGGING SKILLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] Open a trace file after a test failure
+      - Command: playwright show-trace traces/trace-<test_name>.zip
+      - Step through the timeline, find where it broke
+
+[ ] Run tests headed with slow motion
+      - Command: python3 -m pytest --playwright-slowmo=1000
+      - Watch the browser execute your tests step by step
+
+[ ] Use Playwright codegen to record a new test
+      - Command: playwright codegen https://automationexercise.com
+      - Click around the site, copy the generated code, clean it up into a proper test
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ CONCEPTS TO STUDY
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+[ ] pytest.mark.parametrize
+      - Run one test function with multiple sets of inputs
+
+[ ] Fixtures with yield vs try/finally
+      - Two ways to write teardown — know both and when to use each
+
+[ ] page.wait_for_selector vs expect()
+      - expect() auto-waits and retries; wait_for_selector waits for DOM presence
+      - Prefer expect() for assertions in Playwright
+
+[ ] page.request vs the requests library
+      - page.request shares the Playwright browser context (cookies, auth)
+      - requests library is independent — know why this project uses page.request
+
+[ ] Docker — run the tests in a container
+      - Command: docker-compose up
+      - Tests should pass in CI, not just on your machine
+
+[ ] allure-pytest report
+      - More powerful report format used in many companies
+      - Install: pip install allure-pytest
+      - Run: python3 -m pytest --alluredir=allure-results
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PRIORITY — DO THESE FIRST
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Write 2-3 new UI tests from scratch (cart, logout, category filter)
+      WHY: Shows you can BUILD tests, not just read them
+
+2. Add @pytest.mark.parametrize to an existing test
+      WHY: Almost every QA interview asks about this
+
+3. Break a test, open the trace, explain what happened
+      WHY: Debugging is most of the actual job

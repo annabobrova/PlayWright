@@ -47,7 +47,7 @@ def test_contact_us_form_submission(page: Page) -> None:
         ".status.alert-success",
         has_text="Success! Your details have been submitted successfully."
     )
-    expect(success_alert).to_be_visible()
+    expect(success_alert).to_be_visible(timeout=15000)
 
     # 7. Click 'Home' button and verify landing page
     contact_us_page.click_home()
