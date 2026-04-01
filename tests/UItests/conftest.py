@@ -1,15 +1,13 @@
 import os
-import sys
 import re
+import sys
 import pytest
 from typing import Generator
 from playwright.sync_api import Browser, Page, expect
 
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
 
-from config import BASE_URL, LOGIN_EMAIL, LOGIN_PASSWORD
-
-AUTH_STATE_PATH = "auth/state.json"
+from config import BASE_URL, LOGIN_EMAIL, LOGIN_PASSWORD, AUTH_STATE_PATH, AD_BLOCK_PATTERN
 
 
 def _is_auth_state_valid(browser: Browser) -> bool:
@@ -68,7 +66,7 @@ def logged_in_page(browser: Browser, auth_state: str, request) -> Generator[Page
     context.tracing.start(screenshots=True, snapshots=True, sources=True)
     page = context.new_page()
 
-    ad_regex = re.compile(r"googleads|doubleclick|quantserve|facebook")
+    ad_regex = re.compile(AD_BLOCK_PATTERN)
     page.route(ad_regex, lambda route: route.abort())
 
     page.goto(BASE_URL)

@@ -29,3 +29,9 @@ BASE_URL = os.getenv("BASE_URL", "https://automationexercise.com/")
 LOGIN_EMAIL = os.getenv("LOGIN_EMAIL", "playwright@automationexercise.com")
 LOGIN_PASSWORD = os.getenv("LOGIN_PASSWORD", "Password123!")
 
+# Auth state path for saved session
+AUTH_STATE_PATH = "auth/state.json"
+
+# Ad-blocking pattern
+AD_BLOCK_PATTERN = r"googleads|doubleclick|quantserve|facebook"
+

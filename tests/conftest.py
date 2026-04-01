@@ -1,9 +1,11 @@
-import os, re
+import os
+import re
 import sys
-from typing import Any, Generator # Import Generator and Any for type hinting
+from typing import Any, Generator
 
 import pytest
 from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page
+from config import AD_BLOCK_PATTERN
 
 def pytest_addoption(parser):
     parser.addoption("--headless", action="store", default="false", help="run tests in headless mode (true/false)")
@@ -53,7 +55,7 @@ def block_ads(page: Page):
     without interfering with other API calls.
     """
     # Use a regex to target ONLY ads, leaving other traffic alone
-    ad_regex = re.compile(r"googleads|doubleclick|quantserve|facebook")
+    ad_regex = re.compile(AD_BLOCK_PATTERN)
     
     # We only route requests that match the ad pattern
     page.route(ad_regex, lambda route: route.abort())

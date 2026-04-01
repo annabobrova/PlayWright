@@ -3,7 +3,7 @@ import string
 from playwright.sync_api import APIRequestContext
 from config import (
     BASE_URL, TEST_PASSWORD, TEST_NAME_SIGNUP,
-    TEST_FIRST_NAME, TEST_LAST_NAME, TEST_COMPANY, TEST_ADDRESS,
+    TEST_FIRST_NAME, TEST_LAST_NAME, TEST_COMPANY, TEST_ADDRESS, TEST_ADDRESS_2,
     TEST_COUNTRY, TEST_STATE, TEST_CITY, TEST_ZIPCODE, TEST_PHONE,
     TEST_DAY, TEST_MONTH, TEST_YEAR
 )
@@ -34,7 +34,7 @@ def create_user_via_api(api_request_context: APIRequestContext, email: str) -> d
         "lastname": TEST_LAST_NAME,
         "company": TEST_COMPANY,
         "address1": TEST_ADDRESS,
-        "address2": "Apt 101",
+        "address2": TEST_ADDRESS_2,
         "country": TEST_COUNTRY,
         "zipcode": TEST_ZIPCODE,
         "state": TEST_STATE,

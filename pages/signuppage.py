@@ -1,5 +1,5 @@
 import logging
-from playwright.sync_api import Page
+from playwright.sync_api import Page, expect
 from utils import generate_random_email
 
 logger = logging.getLogger(__name__)
