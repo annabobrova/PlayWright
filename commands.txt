@@ -1,3 +1,0 @@
-to run the last tracer viewer: playwright show-trace traces/trace-test_example.zip
-to open codegen: python3 -m playwright codegen https://automationexercise.com
-run all tests and get a report: .venv/bin/python -m pytest tests/ --html=report.html --self-contained-html
