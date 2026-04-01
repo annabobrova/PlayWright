@@ -12,5 +12,7 @@ report.html
 auth/
 commands.txt
 PlayWrightLearning.txt
+.vscode/
+assets/
 package.json
 package-lock.json
