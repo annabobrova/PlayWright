@@ -20,14 +20,11 @@ def test_api_12_delete_user_account(page: Page) -> None:
 
 
 @pytest.mark.api
-def test_api_13_update_user_account(page: Page) -> None:
+def test_api_13_update_user_account(page: Page, registered_user: str) -> None:
     """API 13: Verify that PUT /api/updateAccount with full user details returns 200 - User updated!"""
-    email = generate_random_email()
-    create_user_via_api(page.request, email)
-
     payload = {
         "name": TEST_NAME_SIGNUP,
-        "email": email,
+        "email": registered_user,
         "password": TEST_PASSWORD,
         "title": "Mrs",
         "birth_date": TEST_DAY,
@@ -50,16 +47,11 @@ def test_api_13_update_user_account(page: Page) -> None:
     assert body.get("responseCode") == 200, f"Expected 200, got: {body}"
     assert body.get("message") == "User updated!", f"Unexpected message: {body}"
 
-    delete_user_via_api(page.request, email)
-
 
 @pytest.mark.api
-def test_api_14_get_user_detail_by_email(page: Page) -> None:
+def test_api_14_get_user_detail_by_email(page: Page, registered_user: str) -> None:
     """API 14: Verify that GET /api/getUserDetailByEmail with a valid email returns 200 with user details including id, name and email."""
-    email = generate_random_email()
-    create_user_via_api(page.request, email)
-
-    response = page.request.get(f"{BASE_URL}/api/getUserDetailByEmail", params={"email": email})
+    response = page.request.get(f"{BASE_URL}/api/getUserDetailByEmail", params={"email": registered_user})
 
     assert response.status == 200, f"Expected HTTP 200, got {response.status}"
 
@@ -68,8 +60,6 @@ def test_api_14_get_user_detail_by_email(page: Page) -> None:
 
     user = body.get("user")
     assert user is not None, f"Expected 'user' in response, got: {body}"
-    assert user.get("email") == email, f"Expected email {email}, got: {user.get('email')}"
+    assert user.get("email") == registered_user, f"Expected email {registered_user}, got: {user.get('email')}"
     assert "name" in user, f"User missing 'name' field: {user}"
     assert "id" in user, f"User missing 'id' field: {user}"
-
-    delete_user_via_api(page.request, email)

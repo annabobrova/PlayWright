@@ -1,25 +1,19 @@
 import pytest
 from playwright.sync_api import Page
-from utils import generate_random_email, create_user_via_api, delete_user_via_api
 from config import BASE_URL, TEST_PASSWORD
 
 
 @pytest.mark.api
-def test_api_7_verify_login_valid(page: Page) -> None:
+def test_api_7_verify_login_valid(page: Page, registered_user: str) -> None:
     """API 7: Verify that POST /api/verifyLogin with valid credentials returns 200 - User exists!"""
-    email = generate_random_email()
-    create_user_via_api(page.request, email)
-
     response = page.request.post(
         f"{BASE_URL}/api/verifyLogin",
-        form={"email": email, "password": TEST_PASSWORD}
+        form={"email": registered_user, "password": TEST_PASSWORD}
     )
 
     body = response.json()
     assert body.get("responseCode") == 200, f"Expected 200, got: {body}"
     assert body.get("message") == "User exists!", f"Unexpected message: {body}"
-
-    delete_user_via_api(page.request, email)
 
 
 @pytest.mark.api
