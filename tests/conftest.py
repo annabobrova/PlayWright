@@ -77,10 +77,12 @@ def pytest_runtest_makereport(item, call):
         if page:
             os.makedirs("screenshots", exist_ok=True)
             screenshot_path = f"screenshots/{item.nodeid.replace('::', '_').replace('/', '_')}.png"
-            page.screenshot(path=screenshot_path)
-            if pytest_html is not None:
-                # Add the screenshot to the HTML report
-                extras.append(pytest_html.extras.image(screenshot_path))
+            try:
+                page.screenshot(path=screenshot_path)
+                if pytest_html is not None:
+                    extras.append(pytest_html.extras.image(screenshot_path))
+            except Exception:
+                pass
     
     report.extras = extras
 
