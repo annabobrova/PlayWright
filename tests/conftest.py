@@ -5,6 +5,9 @@ from typing import Any, Generator
 
 import pytest
 from playwright.sync_api import sync_playwright, Browser, BrowserContext, Page
+
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 from config import AD_BLOCK_PATTERN
 
 def pytest_addoption(parser):
