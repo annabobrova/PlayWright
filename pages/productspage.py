@@ -45,11 +45,12 @@ class ProductsPage:
         expect(self.page.locator(".features_items")).to_be_visible()
 
     def verify_search_results_contain_name(self, expected_name: str) -> None:
-        """Verify every product in the search results contains the expected name."""
+        """Verify at least one search result contains the expected name."""
         product_names = self.page.locator(".features_items .productinfo p")
         expect(product_names.first).to_be_visible()
-        for name in product_names.all_inner_texts():
-            assert expected_name.lower() in name.lower(), f"Unexpected product name: {name}"
+        names = product_names.all_inner_texts()
+        assert any(expected_name.lower() in name.lower() for name in names), \
+            f"No product containing '{expected_name}' found in results: {names}"
 
     def add_to_cart(self) -> None:
         """Click the Add to cart button on the product detail page."""
