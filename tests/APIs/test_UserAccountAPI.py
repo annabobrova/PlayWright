@@ -9,8 +9,8 @@ from config import (
 
 
 @pytest.mark.api
-def test_api_12_delete_user_account(page: Page) -> None:
-    """API 12: Verify that DELETE /api/deleteAccount with valid credentials returns 200 - Account deleted!"""
+def test_delete_user_account(page: Page) -> None:
+    """Verify that DELETE /api/deleteAccount with valid credentials returns 200 - Account deleted!"""
     email = generate_random_email()
     create_user_via_api(page.request, email)
 
@@ -20,8 +20,8 @@ def test_api_12_delete_user_account(page: Page) -> None:
 
 
 @pytest.mark.api
-def test_api_13_update_user_account(page: Page, registered_user: str) -> None:
-    """API 13: Verify that PUT /api/updateAccount with full user details returns 200 - User updated!"""
+def test_update_user_account(page: Page, registered_user: str) -> None:
+    """Verify that PUT /api/updateAccount with full user details returns 200 - User updated!"""
     payload = {
         "name": TEST_NAME_SIGNUP,
         "email": registered_user,
@@ -49,8 +49,8 @@ def test_api_13_update_user_account(page: Page, registered_user: str) -> None:
 
 
 @pytest.mark.api
-def test_api_14_get_user_detail_by_email(page: Page, registered_user: str) -> None:
-    """API 14: Verify that GET /api/getUserDetailByEmail with a valid email returns 200 with user details including id, name and email."""
+def test_get_user_detail_by_email(page: Page, registered_user: str) -> None:
+    """Verify that GET /api/getUserDetailByEmail with a valid email returns 200 with user details including id, name and email."""
     response = page.request.get(f"{BASE_URL}/api/getUserDetailByEmail", params={"email": registered_user})
 
     assert response.status == 200, f"Expected HTTP 200, got {response.status}"

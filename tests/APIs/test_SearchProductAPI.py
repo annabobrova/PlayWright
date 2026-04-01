@@ -4,8 +4,8 @@ from config import BASE_URL
 
 
 @pytest.mark.api
-def test_api_5_search_product(page: Page) -> None:
-    """API 5: Verify that POST /api/searchProduct with a valid search_product param returns 200 with a matching products list."""
+def test_search_product(page: Page) -> None:
+    """Verify that POST /api/searchProduct with a valid search_product param returns 200 with a matching products list."""
     response = page.request.post(f"{BASE_URL}/api/searchProduct", form={"search_product": "top"})
 
     assert response.status == 200, f"Expected HTTP 200, got {response.status}"
@@ -19,8 +19,8 @@ def test_api_5_search_product(page: Page) -> None:
 
 
 @pytest.mark.api
-def test_api_6_search_product_missing_param(page: Page) -> None:
-    """API 6: Verify that POST /api/searchProduct without the search_product param returns 400 - bad request."""
+def test_search_product_missing_param(page: Page) -> None:
+    """Verify that POST /api/searchProduct without the search_product param returns 400 - bad request."""
     response = page.request.post(f"{BASE_URL}/api/searchProduct")
 
     body = response.json()

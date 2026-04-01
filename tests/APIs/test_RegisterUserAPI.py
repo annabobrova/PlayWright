@@ -7,8 +7,8 @@ from config import BASE_URL, TEST_PASSWORD
 logger = logging.getLogger(__name__)
 
 @pytest.mark.api
-def test_api_11_create_register_user_account(page: Page) -> None:
-    """API 11: Verify that POST /api/createAccount creates a new user and returns 201 - User created!"""
+def test_create_register_user_account(page: Page) -> None:
+    """Verify that POST /api/createAccount creates a new user and returns 201 - User created!"""
     # Get the API request context from the page (or use playwright.request)
     api_request_context = page.request
     

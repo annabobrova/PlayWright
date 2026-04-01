@@ -4,8 +4,8 @@ from config import BASE_URL
 
 
 @pytest.mark.api
-def test_api_3_get_brands_list(page: Page) -> None:
-    """API 3: Verify that GET /api/brandsList returns 200 with a non-empty list of brands containing id and brand name."""
+def test_get_brands_list(page: Page) -> None:
+    """Verify that GET /api/brandsList returns 200 with a non-empty list of brands containing id and brand name."""
     response = page.request.get(f"{BASE_URL}/api/brandsList")
 
     assert response.status == 200, f"Expected HTTP 200, got {response.status}"
@@ -23,8 +23,8 @@ def test_api_3_get_brands_list(page: Page) -> None:
 
 
 @pytest.mark.api
-def test_api_4_put_brands_not_supported(page: Page) -> None:
-    """API 4: Verify that PUT to /api/brandsList returns 405 - method not supported."""
+def test_put_brands_not_supported(page: Page) -> None:
+    """Verify that PUT to /api/brandsList returns 405 - method not supported."""
     response = page.request.put(f"{BASE_URL}/api/brandsList")
 
     body = response.json()

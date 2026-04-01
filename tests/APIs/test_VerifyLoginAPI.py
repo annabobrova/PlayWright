@@ -4,8 +4,8 @@ from config import BASE_URL, TEST_PASSWORD
 
 
 @pytest.mark.api
-def test_api_7_verify_login_valid(page: Page, registered_user: str) -> None:
-    """API 7: Verify that POST /api/verifyLogin with valid credentials returns 200 - User exists!"""
+def test_verify_login_valid(page: Page, registered_user: str) -> None:
+    """Verify that POST /api/verifyLogin with valid credentials returns 200 - User exists!"""
     response = page.request.post(
         f"{BASE_URL}/api/verifyLogin",
         form={"email": registered_user, "password": TEST_PASSWORD}
@@ -17,8 +17,8 @@ def test_api_7_verify_login_valid(page: Page, registered_user: str) -> None:
 
 
 @pytest.mark.api
-def test_api_8_verify_login_missing_email(page: Page) -> None:
-    """API 8: Verify that POST /api/verifyLogin without the email param returns 400 - bad request."""
+def test_verify_login_missing_email(page: Page) -> None:
+    """Verify that POST /api/verifyLogin without the email param returns 400 - bad request."""
     response = page.request.post(
         f"{BASE_URL}/api/verifyLogin",
         form={"password": TEST_PASSWORD}
@@ -30,8 +30,8 @@ def test_api_8_verify_login_missing_email(page: Page) -> None:
 
 
 @pytest.mark.api
-def test_api_9_delete_verify_login_not_supported(page: Page) -> None:
-    """API 9: Verify that DELETE to /api/verifyLogin returns 405 - method not supported."""
+def test_delete_verify_login_not_supported(page: Page) -> None:
+    """Verify that DELETE to /api/verifyLogin returns 405 - method not supported."""
     response = page.request.delete(f"{BASE_URL}/api/verifyLogin")
 
     body = response.json()
@@ -40,8 +40,8 @@ def test_api_9_delete_verify_login_not_supported(page: Page) -> None:
 
 
 @pytest.mark.api
-def test_api_10_verify_login_invalid_credentials(page: Page) -> None:
-    """API 10: Verify that POST /api/verifyLogin with invalid credentials returns 404 - User not found!"""
+def test_verify_login_invalid_credentials(page: Page) -> None:
+    """Verify that POST /api/verifyLogin with invalid credentials returns 404 - User not found!"""
     response = page.request.post(
         f"{BASE_URL}/api/verifyLogin",
         form={"email": "nonexistent@example.com", "password": "wrongpassword"}
