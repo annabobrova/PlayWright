@@ -17,8 +17,9 @@ class HomePage:
         self.page.get_by_role("link", name=" Products").click()
 
     def delete_account(self) -> None:
-        # Click on the Delete Account link
+        """Click on Delete Account link to delete the current user's account."""
         self.page.get_by_role("link", name=" Delete Account").click()
 
     def logout(self) -> None:
+        """Click on Logout link to end the current session."""
         self.page.get_by_role("link", name=" Logout").click()

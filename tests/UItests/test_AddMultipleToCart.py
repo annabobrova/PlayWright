@@ -1,3 +1,4 @@
+import pytest
 from playwright.sync_api import Page
 from pages.homepage import HomePage
 from pages.productspage import ProductsPage
@@ -5,6 +6,7 @@ from pages.cartpage import CartPage
 from config import BASE_URL
 
 
+@pytest.mark.ui
 def test_add_multiple_products_to_cart(logged_in_page: Page) -> None:
     """
     Verify that three products from different parts of the listing page

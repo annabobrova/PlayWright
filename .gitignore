@@ -10,3 +10,7 @@ __pycache__/
 .pytest_cache/
 report.html
 auth/
+commands.txt
+PlayWrightLearning.txt
+package.json
+package-lock.json

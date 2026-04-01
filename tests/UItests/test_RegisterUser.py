@@ -1,4 +1,6 @@
 import re
+import logging
+import pytest
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
 from pages.signuppage import SignupPage
@@ -7,11 +9,14 @@ from config import (
     BASE_URL, TEST_FIRST_NAME
 )
 
+logger = logging.getLogger(__name__)
+
 """
 Test user registration flow on AutomationExercise website.
 This test uses a unique email for each run to ensure independence.
 """
-def test_example(page: Page) -> None:
+@pytest.mark.ui
+def test_register_user(page: Page) -> None:
     """
     Test user registration, account creation, and successful login verification.
     """
@@ -49,9 +54,9 @@ def test_example(page: Page) -> None:
 
     finally:
         # === Teardown: Post-test cleanup ===
-        print(f"Teardown: Attempting to delete user '{generated_test_email}'.")
+        logger.info("Teardown: Attempting to delete user '%s'.", generated_test_email)
         page.goto(BASE_URL)
-        
+
         home_page.delete_account()
         expect(page.get_by_text("Account Deleted!")).to_be_visible()
-        print(f"Teardown: User '{generated_test_email}' successfully deleted.")
+        logger.info("Teardown: User '%s' successfully deleted.", generated_test_email)

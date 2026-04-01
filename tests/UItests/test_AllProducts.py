@@ -1,9 +1,14 @@
+import logging
+import pytest
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
 from pages.productspage import ProductsPage
 from config import BASE_URL
 
+logger = logging.getLogger(__name__)
 
+
+@pytest.mark.ui
 def test_all_products_and_product_detail(page: Page) -> None:
     """
     Test navigation to All Products, open first product, verify detail fields,
@@ -31,4 +36,4 @@ def test_all_products_and_product_detail(page: Page) -> None:
 
     # 6. User is landed to product detail page and details are visible
     products_page.verify_product_details_visible(first_name, first_price)
-    print(f"Verification: Product details with name '{first_name}' and price '{first_price}' were displayed.")
+    logger.info("Verification: Product details with name '%s' and price '%s' were displayed.", first_name, first_price)

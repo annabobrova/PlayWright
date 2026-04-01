@@ -1,10 +1,15 @@
+import logging
+import pytest
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
 from pages.signuppage import SignupPage
 from utils import generate_random_email, create_user_via_api, delete_user_via_api
 from config import BASE_URL
 
+logger = logging.getLogger(__name__)
 
+
+@pytest.mark.ui
 def test_signup_with_existing_email_shows_error(page: Page) -> None:
     """
     Test signup with an existing email and verify the duplicate email error.
@@ -14,7 +19,7 @@ def test_signup_with_existing_email_shows_error(page: Page) -> None:
     # Setup: Create a user via API so the email is already registered
     api_request_context = page.request
     test_email = generate_random_email()
-    print(f"Setup: Creating user {test_email} via API...")
+    logger.info("Setup: Creating user %s via API...", test_email)
     create_response = create_user_via_api(api_request_context, test_email)
     assert create_response.get("responseCode") == 201, f"API setup failed: {create_response}"
 
@@ -35,12 +40,12 @@ def test_signup_with_existing_email_shows_error(page: Page) -> None:
 
         # 5. Verify error 'Email Address already exist!' is visible
         expect(page.get_by_text("Email Address already exist!")).to_be_visible()
-        print("Verification: Error message for existing email is visible.")
+        logger.info("Verification: Error message for existing email is visible.")
     finally:
         # Teardown: Delete the account via API
-        print(f"Teardown: Deleting user {test_email} via API...")
+        logger.info("Teardown: Deleting user %s via API...", test_email)
         delete_json = delete_user_via_api(api_request_context, test_email)
         if delete_json.get("responseCode") == 200:
-            print("Teardown: Account deleted successfully.")
+            logger.info("Teardown: Account deleted successfully.")
         else:
-            print(f"Teardown: Failed to delete account. Response: {delete_json}")
+            logger.warning("Teardown: Failed to delete account. Response: %s", delete_json)

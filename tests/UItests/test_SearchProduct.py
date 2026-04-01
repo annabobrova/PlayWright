@@ -1,11 +1,11 @@
+import pytest
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
 from pages.productspage import ProductsPage
-from config import BASE_URL
-
-SEARCH_PRODUCT_NAME = "Winter Top"
+from config import BASE_URL, TEST_SEARCH_PRODUCT
 
 
+@pytest.mark.ui
 def test_search_product(page: Page) -> None:
     """
     Test product search for "Winter Top" and verify all results match the name.
@@ -24,10 +24,10 @@ def test_search_product(page: Page) -> None:
     products_page.verify_all_products_page()
 
     # 4. Enter product name in search input and click search button
-    products_page.search_for_product(SEARCH_PRODUCT_NAME)
+    products_page.search_for_product(TEST_SEARCH_PRODUCT)
 
     # 5. Verify 'SEARCHED PRODUCTS' is visible and results are shown
     products_page.verify_searched_products_visible()
 
     # 6. Verify all the products related to search are visible
-    products_page.verify_search_results_contain_name(SEARCH_PRODUCT_NAME)
+    products_page.verify_search_results_contain_name(TEST_SEARCH_PRODUCT)

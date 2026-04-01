@@ -1,8 +1,11 @@
-from playwright.sync_api import Page, expect
+import logging
+from playwright.sync_api import Page
 from utils import generate_random_email
+
+logger = logging.getLogger(__name__)
 from config import (
     TEST_PASSWORD, TEST_NAME_SIGNUP,
-    TEST_FIRST_NAME, TEST_LAST_NAME, TEST_COMPANY, TEST_ADDRESS,
+    TEST_FIRST_NAME, TEST_LAST_NAME, TEST_COMPANY, TEST_ADDRESS, TEST_ADDRESS_2,
     TEST_STATE, TEST_CITY, TEST_ZIPCODE, TEST_PHONE,
     TEST_COUNTRY, TEST_DAY, TEST_MONTH, TEST_YEAR
 )
@@ -20,7 +23,7 @@ class SignupPage:
         self.page.get_by_role("textbox", name="Name").fill(TEST_NAME_SIGNUP)
         self.page.locator("form").filter(has_text="Signup").get_by_placeholder("Email Address").fill(self.email)
         self.page.get_by_role("button", name="Signup").click()
-        print(f"SignupPage: Filled signup form with Name='{TEST_NAME_SIGNUP}' and Email='{self.email}'.")
+        logger.info("SignupPage: Filled signup form with Name='%s' and Email='%s'.", TEST_NAME_SIGNUP, self.email)
 
     def verify_account_information_form(self) -> None:
         """
@@ -49,7 +52,7 @@ class SignupPage:
         self.page.get_by_role("textbox", name="Company", exact=True).press("Tab")
         self.page.get_by_role("textbox", name="Address * (Street address, P.").fill(TEST_ADDRESS)
         self.page.get_by_role("textbox", name="Address * (Street address, P.").press("Tab")
-        self.page.get_by_role("textbox", name="Address 2").fill("address2")
+        self.page.get_by_role("textbox", name="Address 2").fill(TEST_ADDRESS_2)
         self.page.get_by_role("textbox", name="Address 2").press("Tab")
         self.page.get_by_label("Country *").select_option(TEST_COUNTRY)
         self.page.get_by_role("textbox", name="State *").click()

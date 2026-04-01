@@ -1,7 +1,9 @@
+import pytest
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
 
 
+@pytest.mark.ui
 def test_logout(logged_in_page: Page) -> None:
     """
     Verify that a logged-in user can log out successfully.

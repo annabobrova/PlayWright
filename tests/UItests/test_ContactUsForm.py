@@ -1,3 +1,4 @@
+import pytest
 from pathlib import Path
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
@@ -6,6 +7,7 @@ from utils import generate_random_email
 from config import BASE_URL, TEST_NAME_SIGNUP
 
 
+@pytest.mark.ui
 def test_contact_us_form_submission(page: Page) -> None:
     """
     Test the Contact Us form by submitting details, uploading a file,

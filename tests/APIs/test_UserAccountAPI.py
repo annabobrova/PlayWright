@@ -1,3 +1,4 @@
+import pytest
 from playwright.sync_api import Page
 from utils import generate_random_email, create_user_via_api, delete_user_via_api
 from config import (
@@ -7,16 +8,18 @@ from config import (
 )
 
 
+@pytest.mark.api
 def test_api_12_delete_user_account(page: Page) -> None:
     """API 12: Verify that DELETE /api/deleteAccount with valid credentials returns 200 - Account deleted!"""
     email = generate_random_email()
     create_user_via_api(page.request, email)
 
     delete_json = delete_user_via_api(page.request, email)
-    assert delete_json.get("responseCode") == 200
-    assert delete_json.get("message") == "Account deleted!"
+    assert delete_json.get("responseCode") == 200, f"Expected 200, got: {delete_json}"
+    assert delete_json.get("message") == "Account deleted!", f"Unexpected message: {delete_json}"
 
 
+@pytest.mark.api
 def test_api_13_update_user_account(page: Page) -> None:
     """API 13: Verify that PUT /api/updateAccount with full user details returns 200 - User updated!"""
     email = generate_random_email()
@@ -44,12 +47,13 @@ def test_api_13_update_user_account(page: Page) -> None:
     response = page.request.put(f"{BASE_URL}/api/updateAccount", form=payload)
 
     body = response.json()
-    assert body.get("responseCode") == 200
-    assert body.get("message") == "User updated!"
+    assert body.get("responseCode") == 200, f"Expected 200, got: {body}"
+    assert body.get("message") == "User updated!", f"Unexpected message: {body}"
 
     delete_user_via_api(page.request, email)
 
 
+@pytest.mark.api
 def test_api_14_get_user_detail_by_email(page: Page) -> None:
     """API 14: Verify that GET /api/getUserDetailByEmail with a valid email returns 200 with user details including id, name and email."""
     email = generate_random_email()
@@ -57,15 +61,15 @@ def test_api_14_get_user_detail_by_email(page: Page) -> None:
 
     response = page.request.get(f"{BASE_URL}/api/getUserDetailByEmail", params={"email": email})
 
-    assert response.status == 200
+    assert response.status == 200, f"Expected HTTP 200, got {response.status}"
 
     body = response.json()
-    assert body.get("responseCode") == 200
+    assert body.get("responseCode") == 200, f"Expected responseCode 200, got: {body}"
 
     user = body.get("user")
-    assert user is not None
-    assert user.get("email") == email
-    assert "name" in user
-    assert "id" in user
+    assert user is not None, f"Expected 'user' in response, got: {body}"
+    assert user.get("email") == email, f"Expected email {email}, got: {user.get('email')}"
+    assert "name" in user, f"User missing 'name' field: {user}"
+    assert "id" in user, f"User missing 'id' field: {user}"
 
     delete_user_via_api(page.request, email)

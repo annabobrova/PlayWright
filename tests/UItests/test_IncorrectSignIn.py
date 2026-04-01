@@ -1,9 +1,11 @@
+import pytest
 from playwright.sync_api import Page, expect
 from pages.homepage import HomePage
 from pages.signuppage import SignupPage
 from utils import generate_random_email
 from config import BASE_URL, TEST_PASSWORD
 
+@pytest.mark.ui
 def test_incorrect_login_with_unregistered_email(page: Page) -> None:
     """
     Test login with an unregistered email and verify the incorrect credentials error.
@@ -11,7 +13,7 @@ def test_incorrect_login_with_unregistered_email(page: Page) -> None:
     home_page = HomePage(page)
     # Generate a random email that definitely doesn't exist in the system
     random_email = generate_random_email()
-    login_page = SignupPage(page, email=random_email)
+    signup_page = SignupPage(page, email=random_email)
 
     # 1. Navigate to home page
     page.goto(BASE_URL)
@@ -24,7 +26,7 @@ def test_incorrect_login_with_unregistered_email(page: Page) -> None:
     # 3. Enter random email and password
     # The login_to_your_account method uses self.email (which is our random one)
     # and TEST_PASSWORD from config (which is what we want).
-    login_page.login_to_your_account()
+    signup_page.login_to_your_account()
 
     # 4. Verify error 'Your email or password is incorrect!' is visible
     # Note: The exact text on the site is "Your email or password is incorrect!"
