@@ -1,6 +1,8 @@
+import jsonschema
 import pytest
 from playwright.sync_api import Page
 from utils import generate_random_email, create_user_via_api, delete_user_via_api
+from schemas import USER_DETAIL_RESPONSE_SCHEMA
 from config import (
     BASE_URL, TEST_PASSWORD, TEST_NAME_SIGNUP, TEST_FIRST_NAME, TEST_LAST_NAME,
     TEST_COMPANY, TEST_ADDRESS, TEST_COUNTRY, TEST_STATE, TEST_CITY,
@@ -58,8 +60,6 @@ def test_get_user_detail_by_email(page: Page, registered_user: str) -> None:
     body = response.json()
     assert body.get("responseCode") == 200, f"Expected responseCode 200, got: {body}"
 
-    user = body.get("user")
-    assert user is not None, f"Expected 'user' in response, got: {body}"
-    assert user.get("email") == registered_user, f"Expected email {registered_user}, got: {user.get('email')}"
-    assert "name" in user, f"User missing 'name' field: {user}"
-    assert "id" in user, f"User missing 'id' field: {user}"
+    jsonschema.validate(body, USER_DETAIL_RESPONSE_SCHEMA)
+
+    assert body["user"]["email"] == registered_user, f"Expected email {registered_user}, got: {body['user']['email']}"

@@ -12,8 +12,9 @@ A test automation framework built with **Playwright** and **Python**, targeting 
 - **Playwright** — browser automation and HTTP client
 - **pytest** — test runner
 - **pytest-html** — HTML test reports
+- **jsonschema** — API response schema validation
 - **Docker** — containerized test execution
-- **GitHub Actions** — CI/CD pipeline
+- **GitHub Actions** — CI/CD pipeline with parallel test execution
 
 ---
 
@@ -30,6 +31,7 @@ A test automation framework built with **Playwright** and **Python**, targeting 
 │   ├── UItests/        # Browser UI tests
 │   └── APIs/           # API tests
 ├── config.py           # Shared configuration and test data
+├── schemas.py          # JSON schemas for API response validation
 ├── utils.py            # Helper functions (API setup/teardown, email generation)
 ├── conftest.py         # Fixtures: browser, context, tracing, ad-blocking
 └── pytest.ini          # pytest configuration and markers
@@ -54,10 +56,13 @@ Browser tests using the Page Object Model:
 API tests using Playwright's built-in HTTP client:
 - Products list
 - Brands list
-- Search product
+- Search product (data-driven, parametrized from JSON)
+- Search product with mocked responses (success and 500 error)
 - Verify login (valid, invalid, missing params)
 - Create, update, delete user account
 - Get user details by email
+
+All structured responses validated against JSON schemas defined in `schemas.py`.
 
 ---
 
@@ -66,10 +71,14 @@ API tests using Playwright's built-in HTTP client:
 - **Page Object Model** — selectors and actions encapsulated in page classes
 - **Auth state caching** — login session reused across tests for performance
 - **API-driven setup/teardown** — users created and deleted via API, not UI
+- **Schema validation** — full API response structure validated with jsonschema
+- **Data-driven tests** — parametrized tests with inputs loaded from JSON files
+- **API response mocking** — `page.route()` intercepts browser-initiated requests to simulate error scenarios
 - **Tracing** — Playwright traces saved per test for debugging
 - **Screenshots on failure** — automatically captured and added to HTML report
 - **Ad blocking** — test-specific ad domains blocked to reduce noise
 - **pytest markers** — run UI or API tests selectively with `-m ui` or `-m api`
+- **Parallel CI** — API and UI test suites run simultaneously in GitHub Actions
 - **Docker support** — run tests in a container for consistent environments
 
 ---

@@ -1,6 +1,8 @@
+import jsonschema
 import pytest
 from playwright.sync_api import Page
 from config import BASE_URL
+from schemas import BRANDS_RESPONSE_SCHEMA
 
 
 @pytest.mark.api
@@ -13,13 +15,9 @@ def test_get_brands_list(page: Page) -> None:
     body = response.json()
     assert body.get("responseCode") == 200, f"Expected responseCode 200, got: {body}"
 
-    brands = body.get("brands")
-    assert isinstance(brands, list), f"Expected brands to be a list, got: {type(brands)}"
-    assert len(brands) > 0, "Expected at least one brand in the list"
+    jsonschema.validate(body, BRANDS_RESPONSE_SCHEMA)
 
-    first = brands[0]
-    assert "id" in first, f"Brand missing 'id' field: {first}"
-    assert "brand" in first, f"Brand missing 'brand' field: {first}"
+    assert len(body["brands"]) > 0, "Expected at least one brand in the list"
 
 
 @pytest.mark.api

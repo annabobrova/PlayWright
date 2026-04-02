@@ -1,8 +1,10 @@
 import json
+import jsonschema
 import os
 import pytest
 from playwright.sync_api import Page
 from config import BASE_URL
+from schemas import PRODUCTS_RESPONSE_SCHEMA
 
 
 def _load_search_data() -> list[str]:
@@ -22,9 +24,9 @@ def test_search_product(page: Page, search_term: str) -> None:
     body = response.json()
     assert body.get("responseCode") == 200, f"Expected responseCode 200, got: {body}"
 
-    products = body.get("products")
-    assert isinstance(products, list), f"Expected products to be a list, got: {type(products)}"
-    assert len(products) > 0, f"Expected at least one product for search term '{search_term}'"
+    jsonschema.validate(body, PRODUCTS_RESPONSE_SCHEMA)
+
+    assert len(body["products"]) > 0, f"Expected at least one product for search term '{search_term}'"
 
 
 @pytest.mark.api
@@ -69,8 +71,6 @@ def test_search_product_mocked_response(page: Page) -> None:
         const res = await fetch('/api/searchProduct', { method: 'POST', body: form });
         return { status: res.status, body: await res.json() };
     }""")
-
-    page.pause()
 
     assert result["status"] == 200
     body = result["body"]
