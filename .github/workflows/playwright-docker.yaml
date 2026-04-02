@@ -4,28 +4,22 @@ on:
   workflow_dispatch:
 
 jobs:
-  # Your existing setup
-  native-run:
+  test:
     runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Install dependencies and run
-        run: |
-          pip install -r requirements.txt
-          playwright install --with-deps chromium
-          pytest --headless=true
-
-  # Your new Docker setup
-  docker-run:
-    runs-on: ubuntu-latest
-    # This tells GitHub to run the entire job inside this image
     container:
       image: mcr.microsoft.com/playwright/python:v1.57.0-jammy
+    strategy:
+      fail-fast: false
+      matrix:
+        suite:
+          - name: "API Tests"
+            path: "tests/APIs/"
+          - name: "UI Tests"
+            path: "tests/UItests/"
+    name: ${{ matrix.suite.name }}
     steps:
       - uses: actions/checkout@v4
-      - name: Run tests inside container
+      - name: Run ${{ matrix.suite.name }}
         run: |
-          # No need to run 'playwright install' here!
-          # The browsers are already in the image.
           pip install -r requirements.txt
-          pytest --headless=true
+          pytest ${{ matrix.suite.path }} --headless=true
